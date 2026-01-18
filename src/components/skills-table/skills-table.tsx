@@ -1,23 +1,9 @@
-import type { Rank } from "@/src/entities/rank/types";
+import type { Skill } from "@/src/entities/rank/types";
 
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
-import { getRankBgColor } from "@/src/entities/rank/ui/get-rank-bg-color";
+import { getRankBgColor } from "@/src/entities/rank/ui/get-rank-color";
 import { cn } from "@/src/lib/utils";
 
-type Skill = {
-  id: number;
-  title: string;
-  description: string;
-  rank: Rank;
-  level: number;
-  currentXp: number;
-  nextLevelXp: number;
-  tasks: {
-    id: number;
-    title: string;
-    isCompleted: boolean;
-  }[];
-};
 function SkillsTable({ skills, selectedSkillId, setSelectedSkillId }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void }) {
   return (
     <>
