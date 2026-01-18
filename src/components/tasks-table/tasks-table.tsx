@@ -1,25 +1,10 @@
 import { Pencil, Trash } from "lucide-react";
 
-import type { Rank } from "@/src/entities/rank/types";
+import type { Skill } from "@/src/entities/rank/types";
 
 import { Checkbox } from "@/src/components/ui/checkbox";
-import { getRankBgColor, getRankBorderColor, getRankTaskBgColor } from "@/src/entities/rank/ui/get-rank-bg-color";
+import { getRankBgColor, getRankBorderColor, getRankTaskBgColor } from "@/src/entities/rank/ui/get-rank-color";
 import { cn } from "@/src/lib/utils";
-
-type Skill = {
-  id: number;
-  title: string;
-  description: string;
-  rank: Rank;
-  level: number;
-  currentXp: number;
-  nextLevelXp: number;
-  tasks: {
-    id: number;
-    title: string;
-    isCompleted: boolean;
-  }[];
-};
 
 function TasksTable({ selectedSkill }: { selectedSkill: Skill }) {
   return (

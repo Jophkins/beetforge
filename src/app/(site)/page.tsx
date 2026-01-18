@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-import type { Rank } from "@/src/entities/rank/types";
+import type { Skill } from "@/src/entities/rank/types";
 
 import Character from "@/src/components/character/character";
 import Header from "@/src/components/header/header";
@@ -9,21 +9,6 @@ import SkillsTable from "@/src/components/skills-table/skills-table";
 import TasksTable from "@/src/components/tasks-table/tasks-table";
 
 export default function HomePage() {
-  type Skill = {
-    id: number;
-    title: string;
-    description: string;
-    rank: Rank;
-    level: number;
-    currentXp: number;
-    nextLevelXp: number;
-    tasks: {
-      id: number;
-      title: string;
-      isCompleted: boolean;
-    }[];
-  };
-
   const skills: Skill[] = [
     {
       id: 1,
