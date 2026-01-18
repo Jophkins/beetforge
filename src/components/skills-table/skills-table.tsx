@@ -1,6 +1,19 @@
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
+import type { Rank } from "@/src/entities/rank/types";
 
-function SkillsTable() {
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
+import { getRankBgColor } from "@/src/entities/rank/ui/get-rank-bg-color";
+import { cn } from "@/src/lib/utils";
+
+type Skill = {
+  id: number;
+  title: string;
+  description: string;
+  rank: Rank;
+  level: number;
+  currentXp: number;
+  nextLevelXp: number;
+};
+function SkillsTable({ skills }: { skills: Skill[] }) {
   return (
     <>
       <div className="flex items-center gap-2 border-b border-gray-600 pb-2">
@@ -30,22 +43,26 @@ function SkillsTable() {
             <TableHead className="text-center">XP</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
+          {skills.map((skill) => {
+            return (
+              <TableRow key={skill.id} className="cursor-pointer hover:bg-gray-100 transition-colors">
+                <TableCell className={cn("mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 text-white rounded", getRankBgColor(skill.rank))}>
+                  {skill.rank}
+                </TableCell>
+                <TableCell className="text-center">{skill.title}</TableCell>
+                <TableCell className="text-center">{skill.level}</TableCell>
+                <TableCell className="text-center">
+                  {skill.currentXp}
+                  /
+                  {skill.nextLevelXp}
+                </TableCell>
+                <TableCell className="text-right">actions</TableCell>
+              </TableRow>
+            );
+          })}
         </TableHeader>
         <TableBody>
-          <TableRow className="cursor-pointer hover:bg-gray-100 transition-colors">
-            <TableCell className="mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 bg-purple-700 text-white rounded">S</TableCell>
-            <TableCell className="text-center">Skating</TableCell>
-            <TableCell className="text-center">9</TableCell>
-            <TableCell className="text-center">140/900</TableCell>
-            <TableCell className="text-right">actions</TableCell>
-          </TableRow>
-          <TableRow className="cursor-pointer hover:bg-gray-100 transition-colors">
-            <TableCell className="mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 bg-red-500 text-white rounded">A</TableCell>
-            <TableCell className="text-center">Coding</TableCell>
-            <TableCell className="text-center">17</TableCell>
-            <TableCell className="text-center">775/4400</TableCell>
-            <TableCell className="text-right">actions</TableCell>
-          </TableRow>
+
         </TableBody>
       </Table>
     </>
