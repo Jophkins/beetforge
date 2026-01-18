@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+
 import type { Rank } from "@/src/entities/rank/types";
 
 import Character from "@/src/components/character/character";
@@ -96,7 +99,7 @@ export default function HomePage() {
       description: "I can play piano",
       rank: "B",
       level: 14,
-      currentXp: 520,
+      currentXp: 2200,
       nextLevelXp: 2900,
       tasks: [
         {
@@ -113,6 +116,8 @@ export default function HomePage() {
     },
   ];
 
+  const [selectedSkillId, setSelectedSkillId] = useState<number | null>(null);
+  const selectedSkill = skills.find(skill => skill.id === selectedSkillId);
   return (
     <div className="flex items-center justify-center h-screen p-4">
       <div className="w-11/12 max-w-7xl border rounded-lg shadow-lg">
@@ -123,10 +128,10 @@ export default function HomePage() {
           </div>
           <div className="flex gap-4">
             <div className="w-2/4 mt-8">
-              <SkillsTable skills={skills} />
+              <SkillsTable skills={skills} selectedSkillId={selectedSkillId} setSelectedSkillId={setSelectedSkillId} />
             </div>
             <div className="w-2/4 mt-8">
-              <TasksTable skills={skills} />
+              <TasksTable selectedSkill={selectedSkill ?? (undefined as unknown as Skill)} />
             </div>
           </div>
         </main>
