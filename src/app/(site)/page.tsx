@@ -14,6 +14,11 @@ export default function HomePage() {
     level: number;
     currentXp: number;
     nextLevelXp: number;
+    tasks: {
+      id: number;
+      title: string;
+      isCompleted: boolean;
+    }[];
   };
 
   const skills: Skill[] = [
@@ -25,6 +30,23 @@ export default function HomePage() {
       level: 10,
       currentXp: 140,
       nextLevelXp: 900,
+      tasks: [
+        {
+          id: 1,
+          title: "Skate 10 times",
+          isCompleted: true,
+        },
+        {
+          id: 2,
+          title: "Do an ollie",
+          isCompleted: false,
+        },
+        {
+          id: 3,
+          title: "Land a kickflip",
+          isCompleted: false,
+        },
+      ],
     },
     {
       id: 2,
@@ -34,6 +56,18 @@ export default function HomePage() {
       level: 17,
       currentXp: 775,
       nextLevelXp: 4400,
+      tasks: [
+        {
+          id: 1,
+          title: "Code a website",
+          isCompleted: false,
+        },
+        {
+          id: 2,
+          title: "Code a mobile app",
+          isCompleted: false,
+        },
+      ],
     },
     {
       id: 3,
@@ -43,6 +77,18 @@ export default function HomePage() {
       level: 12,
       currentXp: 310,
       nextLevelXp: 1800,
+      tasks: [
+        {
+          id: 1,
+          title: "Snowboard 10 times",
+          isCompleted: false,
+        },
+        {
+          id: 2,
+          title: "Land a 360",
+          isCompleted: false,
+        },
+      ],
     },
     {
       id: 4,
@@ -52,6 +98,18 @@ export default function HomePage() {
       level: 14,
       currentXp: 520,
       nextLevelXp: 2900,
+      tasks: [
+        {
+          id: 1,
+          title: "Play a song",
+          isCompleted: false,
+        },
+        {
+          id: 2,
+          title: "Play a song by Beethoven",
+          isCompleted: true,
+        },
+      ],
     },
   ];
 
@@ -68,7 +126,7 @@ export default function HomePage() {
               <SkillsTable skills={skills} />
             </div>
             <div className="w-2/4 mt-8">
-              <TasksTable />
+              <TasksTable skills={skills} />
             </div>
           </div>
         </main>
