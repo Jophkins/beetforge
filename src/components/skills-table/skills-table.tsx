@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
 import type { Rank } from "@/src/entities/rank/types";
 
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
@@ -16,9 +12,13 @@ type Skill = {
   level: number;
   currentXp: number;
   nextLevelXp: number;
+  tasks: {
+    id: number;
+    title: string;
+    isCompleted: boolean;
+  }[];
 };
-function SkillsTable({ skills }: { skills: Skill[] }) {
-  const [selectedRowId, setSelectedRowId] = useState<number | null>(null);
+function SkillsTable({ skills, selectedSkillId, setSelectedSkillId }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void }) {
   return (
     <>
       <div className="flex items-center gap-2 border-b border-gray-600 pb-2">
@@ -51,7 +51,7 @@ function SkillsTable({ skills }: { skills: Skill[] }) {
         </TableHeader>
         <TableBody>
           {skills.map((skill) => {
-            const isSelected = selectedRowId === skill.id;
+            const isSelected = selectedSkillId === skill.id;
             return (
               <TableRow
                 key={skill.id}
@@ -59,7 +59,7 @@ function SkillsTable({ skills }: { skills: Skill[] }) {
                   "cursor-pointer hover:bg-sky-500/20 transition-colors",
                   isSelected && "bg-sky-500/20",
                 )}
-                onClick={() => setSelectedRowId(isSelected ? null : skill.id)}
+                onClick={() => setSelectedSkillId(isSelected ? skill.id : skill.id)}
               >
                 <TableCell className={cn("mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 text-white rounded", getRankBgColor(skill.rank))}>
                   {skill.rank}
