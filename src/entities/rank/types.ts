@@ -2,15 +2,15 @@ export type Rank = "S" | "A" | "B" | "C";
 
 export type Skill = {
   id: number;
-  title: string;
+  skillName: string;
   description: string;
   rank: Rank;
   level: number;
   currentXp: number;
   nextLevelXp: number;
-  tasks: {
+  goals: {
     id: number;
-    title: string;
+    goalName: string;
     isCompleted: boolean;
   }[];
 };
