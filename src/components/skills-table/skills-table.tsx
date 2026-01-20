@@ -4,25 +4,14 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { getRankBgColor } from "@/src/entities/rank/ui/get-rank-color";
 import { cn } from "@/src/lib/utils";
 
+import AddSkillModal from "../add-skill-modal/add-skill-modal";
+
 function SkillsTable({ skills, selectedSkillId, setSelectedSkillId }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void }) {
   return (
     <>
       <div className="flex items-center gap-2 border-b border-gray-600 pb-2">
         <h2 className="text-lg font-semibold">Skill</h2>
-        <button className="flex items-center justify-center w-6 h-6 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
+        <AddSkillModal />
       </div>
       <Table>
         <TableCaption>A list of your skills.</TableCaption>
@@ -50,7 +39,7 @@ function SkillsTable({ skills, selectedSkillId, setSelectedSkillId }: { skills: 
                 <TableCell className={cn("mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 text-white rounded", getRankBgColor(skill.rank))}>
                   {skill.rank}
                 </TableCell>
-                <TableCell className="text-center">{skill.title}</TableCell>
+                <TableCell className="text-center">{skill.skillName}</TableCell>
                 <TableCell className="text-center">{skill.level}</TableCell>
                 <TableCell className="text-center">
                   {skill.currentXp}

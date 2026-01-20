@@ -12,7 +12,7 @@ function TasksTable({ selectedSkill }: { selectedSkill: Skill }) {
       <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <h2 className="text-lg font-semibold">
           Goals for:
-          {!selectedSkill ? " Select a skill on the left" : ` ${selectedSkill.title}`}
+          {!selectedSkill ? " Select a skill on the left" : ` ${selectedSkill.skillName}`}
         </h2>
         <span className={cn("mt-0.5 font-medium inline-flex items-center justify-center w-12 h-6 bg-purple-700/0 text-white rounded-2xl", getRankBgColor(selectedSkill?.rank))}>{selectedSkill?.rank}</span>
       </div>
@@ -40,10 +40,10 @@ function TasksTable({ selectedSkill }: { selectedSkill: Skill }) {
         </div>
       </div>
       <div className="p-2 border rounded-md border-gray-200 flex flex-col gap-2">
-        {selectedSkill?.tasks.map(task => (
+        {selectedSkill?.goals.map(goal => (
           <div className={cn("flex items-center gap-2 bg-purple-950/30 text-white rounded-md p-2 border-l-4", getRankBorderColor(selectedSkill?.rank), getRankTaskBgColor(selectedSkill?.rank))}>
             <Checkbox />
-            <span className="text-sm">{task.title}</span>
+            <span className="text-sm">{goal.goalName}</span>
             <div className="ml-auto flex gap-1">
               <Pencil className="w-4 h-4" />
               <Trash className="w-4 h-4" />

@@ -12,89 +12,89 @@ export default function HomePage() {
   const skills: Skill[] = [
     {
       id: 1,
-      title: "Skating",
+      skillName: "Skating",
       description: "I can skate",
       rank: "S",
       level: 10,
       currentXp: 140,
       nextLevelXp: 900,
-      tasks: [
+      goals: [
         {
           id: 1,
-          title: "Skate 10 times",
+          goalName: "Skate 10 times",
           isCompleted: true,
         },
         {
           id: 2,
-          title: "Do an ollie",
+          goalName: "Do an ollie",
           isCompleted: false,
         },
         {
           id: 3,
-          title: "Land a kickflip",
+          goalName: "Land a kickflip",
           isCompleted: false,
         },
       ],
     },
     {
       id: 2,
-      title: "Coding",
+      skillName: "Coding",
       description: "I can code",
       rank: "A",
       level: 17,
       currentXp: 775,
       nextLevelXp: 4400,
-      tasks: [
+      goals: [
         {
           id: 1,
-          title: "Code a website",
+          goalName: "Code a website",
           isCompleted: false,
         },
         {
           id: 2,
-          title: "Code a mobile app",
+          goalName: "Code a mobile app",
           isCompleted: false,
         },
       ],
     },
     {
       id: 3,
-      title: "Snowboarding",
+      skillName: "Snowboarding",
       description: "I can snowboard",
       rank: "C",
       level: 12,
       currentXp: 310,
       nextLevelXp: 1800,
-      tasks: [
+      goals: [
         {
           id: 1,
-          title: "Snowboard 10 times",
+          goalName: "Snowboard 10 times",
           isCompleted: false,
         },
         {
           id: 2,
-          title: "Land a 360",
+          goalName: "Land a 360",
           isCompleted: false,
         },
       ],
     },
     {
       id: 4,
-      title: "Piano",
+      skillName: "Piano",
       description: "I can play piano",
       rank: "B",
       level: 14,
       currentXp: 2200,
       nextLevelXp: 2900,
-      tasks: [
+      goals: [
         {
           id: 1,
-          title: "Play a song",
+          goalName: "Play a song",
           isCompleted: false,
         },
         {
           id: 2,
-          title: "Play a song by Beethoven",
+          goalName: "Play a song by Beethoven",
           isCompleted: true,
         },
       ],
