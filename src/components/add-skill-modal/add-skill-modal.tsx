@@ -3,6 +3,8 @@
 import { Check, Plus, X } from "lucide-react";
 import { useState } from "react";
 
+import type { Rank, Skill } from "@/src/entities/rank/types";
+
 import SelectRank from "../select-rank/select-rank";
 import { Button } from "../ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -10,7 +12,11 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
-function AddSkillModal() {
+function AddSkillModal({ onAddSkill }: { onAddSkill: (skill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => void }) {
+  const [open, setOpen] = useState(false);
+  const [skillName, setSkillName] = useState("");
+  const [description, setDescription] = useState("");
+  const [rank, setRank] = useState<Rank | undefined>(undefined);
   const [goals, setGoals] = useState<Array<{ id: number; value: string; checked: boolean }>>([
     { id: 0, value: "", checked: false },
   ]);
@@ -35,13 +41,49 @@ function AddSkillModal() {
       return goal;
     }));
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!skillName.trim() || !description.trim() || !rank) {
+      return;
+    }
+
+    const validGoals = goals
+      .filter(goal => goal.value.trim() !== "")
+      .map((goal, index) => ({
+        id: index + 1,
+        goalName: goal.value.trim(),
+        isCompleted: goal.checked,
+      }));
+
+    if (validGoals.length === 0) {
+      return;
+    }
+
+    onAddSkill({
+      skillName: skillName.trim(),
+      description: description.trim(),
+      rank,
+      goals: validGoals,
+    });
+
+    // Reset form
+    setSkillName("");
+    setDescription("");
+    setRank(undefined);
+    setGoals([{ id: 0, value: "", checked: false }]);
+    setOpen(false);
+  };
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">Add Skill</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add Skill</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Add Skill</DialogTitle>
             <DialogDescription>
@@ -52,14 +94,31 @@ function AddSkillModal() {
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="name-1">Skill Name</Label>
-              <Input id="name-1" name="name" placeholder="Snowboarding" maxLength={20} required />
+              <Input
+                id="name-1"
+                name="name"
+                placeholder="Snowboarding"
+                maxLength={20}
+                required
+                value={skillName}
+                onChange={e => setSkillName(e.target.value)}
+              />
             </div>
             <div className="grid gap-3">
-              <SelectRank />
+              <Label>Rank</Label>
+              <SelectRank value={rank} onValueChange={value => setRank(value)} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="desc-1">Description</Label>
-              <Textarea id="desc-1" name="desc" placeholder="Enter skill description" rows={4} required />
+              <Textarea
+                id="desc-1"
+                name="desc"
+                placeholder="Enter skill description"
+                rows={4}
+                required
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+              />
             </div>
             <div className="grid gap-2">
               <div className="grid grid-cols-[auto_1fr] items-center gap-2">
@@ -104,12 +163,12 @@ function AddSkillModal() {
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button type="button" variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit">Save Skill</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }
