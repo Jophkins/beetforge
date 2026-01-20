@@ -1,8 +1,10 @@
+import type { Rank } from "@/src/entities/rank/types";
+
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
-function SelectRank() {
+function SelectRank({ value, onValueChange }: { value?: Rank; onValueChange?: (value: Rank) => void }) {
   return (
-    <Select>
+    <Select value={value} onValueChange={val => val && onValueChange?.(val as Rank)}>
       <SelectTrigger className="w-[140px]">
         <SelectValue placeholder="Select a rank" />
       </SelectTrigger>

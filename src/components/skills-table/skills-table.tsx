@@ -6,12 +6,12 @@ import { cn } from "@/src/lib/utils";
 
 import AddSkillModal from "../add-skill-modal/add-skill-modal";
 
-function SkillsTable({ skills, selectedSkillId, setSelectedSkillId }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void }) {
+function SkillsTable({ skills, selectedSkillId, setSelectedSkillId, onAddSkill }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void; onAddSkill: (skill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => void }) {
   return (
     <>
       <div className="flex items-center gap-2 border-b border-gray-600 pb-2">
         <h2 className="text-lg font-semibold">Skill</h2>
-        <AddSkillModal />
+        <AddSkillModal onAddSkill={onAddSkill} />
       </div>
       <Table>
         <TableCaption>A list of your skills.</TableCaption>

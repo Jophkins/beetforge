@@ -9,7 +9,7 @@ import SkillsTable from "@/src/components/skills-table/skills-table";
 import TasksTable from "@/src/components/tasks-table/tasks-table";
 
 export default function HomePage() {
-  const skills: Skill[] = [
+  const [skills, setSkills] = useState<Skill[]>([
     {
       id: 1,
       skillName: "Skating",
@@ -99,10 +99,22 @@ export default function HomePage() {
         },
       ],
     },
-  ];
+  ]);
 
   const [selectedSkillId, setSelectedSkillId] = useState<number | null>(null);
   const selectedSkill = skills.find(skill => skill.id === selectedSkillId);
+
+  const addSkill = (newSkill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => {
+    const skill: Skill = {
+      ...newSkill,
+      id: skills.length > 0 ? Math.max(...skills.map(s => s.id), 0) + 1 : 1,
+      level: 1,
+      currentXp: 0,
+      nextLevelXp: 100,
+    };
+    setSkills([...skills, skill]);
+  };
+
   return (
     <div className="flex items-center justify-center h-screen p-4">
       <div className="w-11/12 max-w-7xl border rounded-lg shadow-lg">
@@ -113,7 +125,7 @@ export default function HomePage() {
           </div>
           <div className="flex gap-4">
             <div className="w-2/4 mt-8">
-              <SkillsTable skills={skills} selectedSkillId={selectedSkillId} setSelectedSkillId={setSelectedSkillId} />
+              <SkillsTable skills={skills} selectedSkillId={selectedSkillId} setSelectedSkillId={setSelectedSkillId} onAddSkill={addSkill} />
             </div>
             <div className="w-2/4 mt-8">
               <TasksTable selectedSkill={selectedSkill ?? (undefined as unknown as Skill)} />
