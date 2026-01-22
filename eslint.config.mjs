@@ -34,4 +34,16 @@ export default antfu(
       ],
     },
   },
+  {
+    files: ["prisma.config.ts"],
+    rules: {
+      "node/no-process-env": ["off"],
+    },
+  },
+  {
+    files: ["**/migrations/migration_lock.toml"],
+    rules: {
+      "unicorn/filename-case": "off",
+    },
+  },
 );
