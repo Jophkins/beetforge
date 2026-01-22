@@ -35,7 +35,7 @@ export default antfu(
     },
   },
   {
-    files: ["prisma.config.ts"],
+    files: ["prisma.config.ts", "prisma.ts"],
     rules: {
       "node/no-process-env": ["off"],
     },
