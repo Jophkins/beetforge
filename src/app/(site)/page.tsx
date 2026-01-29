@@ -1,138 +1,81 @@
-"use client";
-import { useState } from "react";
+import Link from "next/link";
 
-import type { Skill } from "@/src/entities/rank/types";
+import { Button } from "@/src/components/ui/button";
 
-import Character from "@/src/components/character/character";
-import Header from "@/src/components/header/header";
-import SkillsTable from "@/src/components/skills-table/skills-table";
-import TasksTable from "@/src/components/tasks-table/tasks-table";
-
-export default function HomePage() {
-  const [skills, setSkills] = useState<Skill[]>([
-    {
-      id: 1,
-      skillName: "Skating",
-      description: "I can skate",
-      rank: "S",
-      level: 10,
-      currentXp: 140,
-      nextLevelXp: 900,
-      goals: [
-        {
-          id: 1,
-          goalName: "Skate 10 times",
-          isCompleted: true,
-        },
-        {
-          id: 2,
-          goalName: "Do an ollie",
-          isCompleted: false,
-        },
-        {
-          id: 3,
-          goalName: "Land a kickflip",
-          isCompleted: false,
-        },
-      ],
-    },
-    {
-      id: 2,
-      skillName: "Coding",
-      description: "I can code",
-      rank: "A",
-      level: 17,
-      currentXp: 775,
-      nextLevelXp: 4400,
-      goals: [
-        {
-          id: 1,
-          goalName: "Code a website",
-          isCompleted: false,
-        },
-        {
-          id: 2,
-          goalName: "Code a mobile app",
-          isCompleted: false,
-        },
-      ],
-    },
-    {
-      id: 3,
-      skillName: "Snowboarding",
-      description: "I can snowboard",
-      rank: "C",
-      level: 12,
-      currentXp: 310,
-      nextLevelXp: 1800,
-      goals: [
-        {
-          id: 1,
-          goalName: "Snowboard 10 times",
-          isCompleted: false,
-        },
-        {
-          id: 2,
-          goalName: "Land a 360",
-          isCompleted: false,
-        },
-      ],
-    },
-    {
-      id: 4,
-      skillName: "Piano",
-      description: "I can play piano",
-      rank: "B",
-      level: 14,
-      currentXp: 2200,
-      nextLevelXp: 2900,
-      goals: [
-        {
-          id: 1,
-          goalName: "Play a song",
-          isCompleted: false,
-        },
-        {
-          id: 2,
-          goalName: "Play a song by Beethoven",
-          isCompleted: true,
-        },
-      ],
-    },
-  ]);
-
-  const [selectedSkillId, setSelectedSkillId] = useState<number | null>(null);
-  const selectedSkill = skills.find(skill => skill.id === selectedSkillId);
-
-  const addSkill = (newSkill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => {
-    const skill: Skill = {
-      ...newSkill,
-      id: skills.length > 0 ? Math.max(...skills.map(s => s.id), 0) + 1 : 1,
-      level: 1,
-      currentXp: 0,
-      nextLevelXp: 100,
-    };
-    setSkills([...skills, skill]);
-  };
-
+export default function LandingPage() {
   return (
-    <div className="flex items-center justify-center h-screen p-4">
-      <div className="w-11/12 max-w-7xl border rounded-lg shadow-lg">
-        <Header />
-        <main className="p-4">
-          <div className="w-2/3">
-            <Character />
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
+      {/* Header */}
+      <header className="border-b shrink-0">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="text-xl font-bold">BeetForge</div>
+          <nav className="flex gap-4">
+            <Link href="/app">
+              <Button variant="outline" size="sm">Sign In</Button>
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 overflow-y-auto">
+        <div className="max-w-4xl w-full text-center space-y-4">
+          <div className="inline-block px-3 py-1 text-xs font-medium bg-muted rounded-full">
+            In Development
           </div>
-          <div className="flex gap-4">
-            <div className="w-2/4 mt-8">
-              <SkillsTable skills={skills} selectedSkillId={selectedSkillId} setSelectedSkillId={setSelectedSkillId} onAddSkill={addSkill} />
+
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Level Up Your Skills
+          </h1>
+
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            BeetForge is a gamified personal skills tracker.
+            Set goals, complete tasks, earn experience, and rank up your abilities.
+          </p>
+
+          <div className="flex gap-4 justify-center pt-2">
+            <Link href="/app">
+              <Button size="lg" className="px-6">
+                Get Started
+              </Button>
+            </Link>
+          </div>
+
+          {/* Features preview */}
+          <div className="grid grid-cols-3 gap-4 pt-8 text-left">
+            <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold mb-2 text-primary">S</div>
+              <h3 className="font-semibold mb-1 text-sm">Rank System</h3>
+              <p className="text-xs text-muted-foreground">
+                From E to S — develop your skills and reach new levels
+              </p>
             </div>
-            <div className="w-2/4 mt-8">
-              <TasksTable selectedSkill={selectedSkill ?? (undefined as unknown as Skill)} />
+
+            <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold mb-2 text-primary">XP</div>
+              <h3 className="font-semibold mb-1 text-sm">Experience</h3>
+              <p className="text-xs text-muted-foreground">
+                Complete tasks, earn XP, and track your progress
+              </p>
+            </div>
+
+            <div className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold mb-2 text-primary">✓</div>
+              <h3 className="font-semibold mb-1 text-sm">Goals & Tasks</h3>
+              <p className="text-xs text-muted-foreground">
+                Break down skills into goals and mark them complete
+              </p>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t py-3 shrink-0">
+        <div className="container mx-auto px-4 text-center text-xs text-muted-foreground">
+          BeetForge © 2026
+        </div>
+      </footer>
     </div>
   );
 }
