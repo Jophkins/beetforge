@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import PublicHeader from "@/src/components/public-header/public-header";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
@@ -46,13 +47,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/" className="text-2xl font-bold">
-            BeetForge
-          </Link>
-        </div>
-      </header>
+      <PublicHeader />
 
       {/* Main */}
       <main className="flex-1 flex items-center justify-center px-4">

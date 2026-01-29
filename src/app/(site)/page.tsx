@@ -1,21 +1,13 @@
 import Link from "next/link";
 
+import PublicHeader from "@/src/components/public-header/public-header";
 import { Button } from "@/src/components/ui/button";
 
 export default function LandingPage() {
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="border-b shrink-0">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="text-xl font-bold">BeetForge</div>
-          <nav className="flex gap-4">
-            <Link href="/login">
-              <Button variant="outline" size="sm">Sign In</Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <PublicHeader />
 
       {/* Hero */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 overflow-y-auto">
