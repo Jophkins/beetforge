@@ -10,7 +10,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="text-xl font-bold">BeetForge</div>
           <nav className="flex gap-4">
-            <Link href="/app">
+            <Link href="/login">
               <Button variant="outline" size="sm">Sign In</Button>
             </Link>
           </nav>
