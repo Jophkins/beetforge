@@ -3,7 +3,7 @@
 import { Check, Plus, X } from "lucide-react";
 import { useState } from "react";
 
-import type { Rank, Skill } from "@/src/entities/rank/types";
+import type { NewSkill, Rank } from "@/src/entities/rank/types";
 
 import SelectRank from "../select-rank/select-rank";
 import { Button } from "../ui/button";
@@ -12,7 +12,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
-function AddSkillModal({ onAddSkill }: { onAddSkill: (skill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => void }) {
+function AddSkillModal({ onAddSkill }: { onAddSkill: (skill: NewSkill) => void }) {
   const [open, setOpen] = useState(false);
   const [skillName, setSkillName] = useState("");
   const [description, setDescription] = useState("");
@@ -52,8 +52,7 @@ function AddSkillModal({ onAddSkill }: { onAddSkill: (skill: Omit<Skill, "id" | 
 
     const validGoals = goals
       .filter(goal => goal.value.trim() !== "")
-      .map((goal, index) => ({
-        id: index + 1,
+      .map(goal => ({
         goalName: goal.value.trim(),
         isCompleted: goal.checked,
       }));

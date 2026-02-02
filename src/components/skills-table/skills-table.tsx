@@ -1,4 +1,4 @@
-import type { Skill } from "@/src/entities/rank/types";
+import type { NewSkill, Skill } from "@/src/entities/rank/types";
 
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
 import { getRankBgColor } from "@/src/entities/rank/ui/get-rank-color";
@@ -6,7 +6,7 @@ import { cn } from "@/src/lib/utils";
 
 import AddSkillModal from "../add-skill-modal/add-skill-modal";
 
-function SkillsTable({ skills, selectedSkillId, setSelectedSkillId, onAddSkill }: { skills: Skill[]; selectedSkillId: number | null; setSelectedSkillId: (id: number) => void; onAddSkill: (skill: Omit<Skill, "id" | "level" | "currentXp" | "nextLevelXp">) => void }) {
+function SkillsTable({ skills, selectedSkillId, setSelectedSkillId, onAddSkill }: { skills: Skill[]; selectedSkillId: string | null; setSelectedSkillId: (id: string | null) => void; onAddSkill: (skill: NewSkill) => void }) {
   return (
     <>
       <div className="flex items-center gap-2 border-b border-gray-600 pb-2">
@@ -34,7 +34,7 @@ function SkillsTable({ skills, selectedSkillId, setSelectedSkillId, onAddSkill }
                   "cursor-pointer hover:bg-sky-500/20 transition-colors",
                   isSelected && "bg-sky-500/20",
                 )}
-                onClick={() => setSelectedSkillId(isSelected ? skill.id : skill.id)}
+                onClick={() => setSelectedSkillId(isSelected ? null : skill.id)}
               >
                 <TableCell className={cn("mt-0.5 font-medium inline-flex items-center justify-center w-8 h-8 text-white rounded", getRankBgColor(skill.rank))}>
                   {skill.rank}
