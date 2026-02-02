@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 const PUBLIC_ROUTES = ["/login", "/register", "/"];
 const APP_PREFIX = "/app";
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const session = req.cookies.get("session")?.value;
 
