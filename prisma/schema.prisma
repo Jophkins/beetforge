@@ -13,6 +13,13 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Rank {
+  S
+  A
+  B
+  C
+}
+
 model Session {
   id           String @id @default(cuid())
   tokenHash    String @unique
@@ -20,14 +27,60 @@ model Session {
   user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt    DateTime
   createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
   passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
   sessions     Session[]
+  skills       Skill[]
+  goals        Goal[]
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  skillName   String
+  description String?
+
+  rank        Rank     @default(C)
+
+  level       Int      @default(1)
+  currentXp   Int      @default(0)
+  nextLevelXp Int      @default(100)
+
+  goals       Goal[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  skillId     String
+  skill       Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  goalName    String
+  isCompleted Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([skillId])
 }
