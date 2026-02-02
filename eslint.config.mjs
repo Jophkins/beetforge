@@ -11,7 +11,7 @@ export default antfu(
       semi: true,
       quotes: "double",
     },
-    ignores: [".pnpm-store/*"],
+    ignores: [".pnpm-store/*", "prisma/migrations/*", "tests/*"],
   },
   {
     rules: {
@@ -29,7 +29,7 @@ export default antfu(
         "error",
         {
           case: "kebabCase",
-          ignore: ["README.md", "node_modules", "LICENSE", ".pnpm-store"],
+          ignore: ["README.md", "node_modules", "LICENSE", ".pnpm-store", "prisma/migrations", "tests"],
         },
       ],
     },
