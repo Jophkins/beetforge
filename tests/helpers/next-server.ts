@@ -1,16 +1,21 @@
-import type { ChildProcess } from "node:child_process";
+import type { ChildProcessWithoutNullStreams } from "node:child_process";
 
 import { spawn } from "node:child_process";
 import net from "node:net";
 import path from "node:path";
 
-let serverProcess: ChildProcess | null = null;
-let serverPort: number | null = null;
+let serverProcess: ChildProcessWithoutNullStreams | null = null;
+
 
 // Shared buffer for debugging
 const logs = { stdout: "", stderr: "" };
 
+
 const ROOT_DIR = path.resolve(import.meta.dirname, "../..");
+
+function pnpmCmd() {
+  return process.platform === "win32" ? "pnpm.cmd" : "pnpm";
+}
 
 /**
  * Get a random available port by binding to port 0.
@@ -38,54 +43,48 @@ async function getAvailablePort(): Promise<number> {
  */
 export async function startNextServer(): Promise<{ baseUrl: string; port: number }> {
   const port = await getAvailablePort();
-  serverPort = port;
 
-  // Reset logs
   logs.stdout = "";
   logs.stderr = "";
 
-  // eslint-disable-next-line no-console
   console.log(`[test] Starting Next.js server on port ${port}...`);
 
-  // Use shell mode for better compatibility with pnpm
-  serverProcess = spawn(`pnpm next dev --port ${port}`, {
-    cwd: ROOT_DIR,
-    stdio: ["ignore", "pipe", "pipe"],
-    shell: true,
-    env: {
-      ...process.env,
-      NODE_ENV: "development",
-    },
-  });
+  serverProcess = spawn(
+    pnpmCmd(),
+    ["next", "dev", "--port", String(port)],
+    {
+      cwd: ROOT_DIR,
+      stdio: ["ignore", "pipe", "pipe"],
+      env: {
+        ...process.env,
+        NODE_ENV: "development",
+        NEXT_TELEMETRY_DISABLED: "1",
+      },
+    }
+  );
 
-  serverProcess.stdout?.on("data", (data: Buffer) => {
+  serverProcess.stdout.on("data", (data: Buffer) => {
     const text = data.toString();
     logs.stdout += text;
-    // eslint-disable-next-line no-console
     console.log(`[next] ${text.trim()}`);
   });
 
-  serverProcess.stderr?.on("data", (data: Buffer) => {
+  serverProcess.stderr.on("data", (data: Buffer) => {
     const text = data.toString();
     logs.stderr += text;
-
     console.error(`[next:err] ${text.trim()}`);
   });
 
-  // Handle early process exit
   serverProcess.on("exit", (code) => {
     if (code !== 0 && code !== null) {
       console.error(`[test] Next.js process exited with code ${code}`);
     }
   });
 
-  // Wait for server to be ready
-  const baseUrl = `http://localhost:${port}`;
+  const baseUrl = `http://127.0.0.1:${port}`;
   await waitForServer(baseUrl);
 
-  // eslint-disable-next-line no-console
   console.log(`[test] Next.js server ready at ${baseUrl}`);
-
   return { baseUrl, port };
 }
 
@@ -93,29 +92,26 @@ export async function startNextServer(): Promise<{ baseUrl: string; port: number
  * Stops the Next.js server if running.
  */
 export async function stopNextServer(): Promise<void> {
-  if (!serverProcess) {
-    return;
-  }
+  if (!serverProcess) return;
 
-  // eslint-disable-next-line no-console
   console.log("[test] Stopping Next.js server...");
 
-  return new Promise((resolve) => {
-    serverProcess!.on("close", () => {
-      serverProcess = null;
-      serverPort = null;
-      resolve();
-    });
+  const p = serverProcess;
+  serverProcess = null;
 
-    serverProcess!.kill("SIGTERM");
+  if (p.exitCode !== null) return;
 
-    // Force kill after 5 seconds
-    setTimeout(() => {
-      if (serverProcess) {
-        serverProcess.kill("SIGKILL");
-      }
-    }, 5000);
-  });
+  p.kill("SIGTERM");
+
+  const exited = await Promise.race([
+    new Promise<boolean>((resolve) => p.once("exit", () => resolve(true))),
+    new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
+  ]);
+
+  if (!exited && p.exitCode === null) {
+    p.kill("SIGKILL");
+    await new Promise<void>((resolve) => p.once("exit", () => resolve()));
+  }
 }
 
 /**
