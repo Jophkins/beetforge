@@ -7,6 +7,9 @@ import Character from "@/src/components/character/character";
 import Header from "@/src/components/header/header";
 import SkillsTable from "@/src/components/skills-table/skills-table";
 import TasksTable from "@/src/components/tasks-table/tasks-table";
+import { cn } from "@/src/lib/utils";
+
+type ActivePanel = "skills" | "goals";
 
 export default function HomePage() {
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -17,6 +20,24 @@ export default function HomePage() {
   const selectedSkill = skills.find(skill => skill.id === selectedSkillId) ?? null;
 
   const [loadingGoalIds, setLoadingGoalIds] = useState<Set<string>>(new Set());
+
+  // Mobile tabs state
+  const [activePanel, setActivePanel] = useState<ActivePanel>("skills");
+
+  // Handle skill selection with auto-switch to Goals on mobile
+  const handleSelectSkill = (skillId: string | null) => {
+    if (skillId === selectedSkillId) {
+      // Deselecting
+      setSelectedSkillId(null);
+    }
+    else {
+      setSelectedSkillId(skillId);
+      // Auto-switch to Goals panel when selecting a skill (for mobile UX)
+      if (skillId !== null) {
+        setActivePanel("goals");
+      }
+    }
+  };
 
   // Load skills on mount
   useEffect(() => {
@@ -156,7 +177,7 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center min-h-dvh">
         <p>Loading...</p>
       </div>
     );
@@ -164,7 +185,7 @@ export default function HomePage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center min-h-dvh">
         <p className="text-red-500">
           Error:
           {error}
@@ -174,19 +195,70 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen p-4">
-      <div className="w-11/12 max-w-7xl border rounded-lg shadow-lg">
+    <div className="min-h-dvh p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto w-full max-w-7xl border rounded-lg shadow-lg">
         <Header />
-        <main className="p-4">
-          <div className="w-2/3">
+        <main className="p-4 sm:p-6">
+          {/* Character section - full width on mobile, 2/3 on larger screens */}
+          <div className="w-full lg:w-2/3">
             <Character />
           </div>
-          <div className="flex gap-4">
-            <div className="w-2/4 mt-8">
-              <SkillsTable skills={skills} selectedSkillId={selectedSkillId} setSelectedSkillId={setSelectedSkillId} onAddSkill={addSkill} />
+
+          {/* Mobile tabs - only visible on small screens */}
+          <div className="flex gap-2 mt-6 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setActivePanel("skills")}
+              className={cn(
+                "flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors",
+                activePanel === "skills"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted hover:bg-muted/80",
+              )}
+            >
+              Skills
+            </button>
+            <button
+              type="button"
+              onClick={() => setActivePanel("goals")}
+              className={cn(
+                "flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors",
+                activePanel === "goals"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted hover:bg-muted/80",
+              )}
+            >
+              Goals
+            </button>
+          </div>
+
+          {/* Content grid - stacked on mobile (with tabs), side-by-side on lg+ */}
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Skills panel */}
+            <div className={cn(
+              "min-w-0",
+              activePanel !== "skills" && "hidden lg:block",
+            )}
+            >
+              <SkillsTable
+                skills={skills}
+                selectedSkillId={selectedSkillId}
+                setSelectedSkillId={handleSelectSkill}
+                onAddSkill={addSkill}
+              />
             </div>
-            <div className="w-2/4 mt-8">
-              <TasksTable selectedSkill={selectedSkill} onToggleGoal={toggleGoal} loadingGoalIds={loadingGoalIds} />
+
+            {/* Goals panel */}
+            <div className={cn(
+              "min-w-0",
+              activePanel !== "goals" && "hidden lg:block",
+            )}
+            >
+              <TasksTable
+                selectedSkill={selectedSkill}
+                onToggleGoal={toggleGoal}
+                loadingGoalIds={loadingGoalIds}
+              />
             </div>
           </div>
         </main>

@@ -24,26 +24,35 @@ function Header() {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 border-b">
-      <h1 className="text-xl font-semibold">BeetForge</h1>
-      <div className="flex gap-2 items-center">
-        <button className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors">
+    <header className="flex flex-wrap items-center justify-between gap-2 p-3 sm:p-4 border-b">
+      <h1 className="text-lg sm:text-xl font-semibold">BeetForge</h1>
+      <div className="flex gap-1 sm:gap-2 items-center">
+        <button
+          type="button"
+          className="px-2 sm:px-4 py-1.5 sm:py-2 text-sm font-medium rounded-md hover:bg-muted transition-colors"
+        >
           Main
         </button>
-        <button className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors">
+        <button
+          type="button"
+          className="hidden sm:block px-4 py-2 text-sm font-medium rounded-md hover:bg-muted transition-colors"
+        >
           Rewards
         </button>
-        <button className="px-4 py-2 text-sm font-medium rounded-md hover:bg-gray-100 transition-colors">
+        <button
+          type="button"
+          className="hidden sm:block px-4 py-2 text-sm font-medium rounded-md hover:bg-muted transition-colors"
+        >
           Help
         </button>
-        <div className="w-px h-6 bg-border mx-2" />
+        <div className="hidden sm:block w-px h-6 bg-border mx-2" />
         <Button
           variant="outline"
           size="sm"
           onClick={handleSignOut}
           disabled={isLoading}
         >
-          {isLoading ? "Signing out..." : "Sign Out"}
+          {isLoading ? "..." : "Sign Out"}
         </Button>
       </div>
     </header>
