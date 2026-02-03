@@ -35,6 +35,7 @@ export default function LoginPage() {
       }
 
       router.push("/app");
+      router.refresh();
     }
     catch {
       setError("Something went wrong. Please try again.");
