@@ -2,13 +2,9 @@ name: Test
 
 on:
   pull_request:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
   push:
-    branches:
-      - main
-      - dev
+    branches: [main, dev]
 
 jobs:
   test:
@@ -30,7 +26,8 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgresql://test:test@localhost:5432/beetforge_test
+      DATABASE_URL: postgresql://test:test@127.0.0.1:5432/beetforge_test
+      DIRECT_URL: postgresql://test:test@127.0.0.1:5432/beetforge_test
       NODE_ENV: test
 
     steps:
@@ -48,10 +45,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Debug DATABASE_URL
+      - name: Debug URLs
         run: |
-          echo "DATABASE_URL=$DATABASE_URL"
-          node -e "console.log(process.env.DATABASE_URL)"
+          echo "DATABASE_URL set? -> ${DATABASE_URL:+yes}"
+          echo "DIRECT_URL set? -> ${DIRECT_URL:+yes}"
+          node -e "console.log({DATABASE_URL: !!process.env.DATABASE_URL, DIRECT_URL: !!process.env.DIRECT_URL})"
 
       - name: Generate Prisma client
         run: pnpm prisma generate
