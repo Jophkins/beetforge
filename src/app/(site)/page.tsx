@@ -26,9 +26,9 @@ export default function LandingPage() {
           </p>
 
           <div className="flex gap-4 justify-center pt-2">
-            <Link href="/app">
+            <Link href="/login">
               <Button size="lg" className="px-6">
-                Get Started
+                Sign In & Get Started
               </Button>
             </Link>
           </div>
